@@ -1,16 +1,82 @@
 // Data Generator {Google Sheets}
 // Scripts Creates a "Custom menu" w/ "Phone Numbers" button
-// ***Works when selecting a column***
 
 function onOpen() {
 	// Adds the Custom menu to the Active Spreadsheet
 	SpreadsheetApp.getUi()
 		.createMenu('Data Generator')
-			.addItem('Phone Numbers', 'Phone_Numbers')
+            .addItem('Phone Numbers', 'Phone_Numbers')
+			.addItem('Full Names', 'Full_Names')
+			.addItem('4 Digit Numbers', 'Four_Digits')
 			.addSeparator()
 			.addToUi();
 }
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// Four_Digits
+// Steps of the code:
+// 1. Determine the Selected Cells
+// 2. Generate random Four_Digits numbers => store in tempArray
+// 3. Insert the Four_Digits numbers from the tempArray into the Selected Cells
+
+function Four_Digits() {
+    var Index_Array = location(Index_Array); //Index_Array = Row 1, Column 1, Row 2, Column 2
+    var range = location(range); //getRange(row, column, numRows, numColumns)
+    var selectedAddress = location(selectedAddress); //selectedAddress
+    var temp_cell_count = cell_count(selectedAddress); // Count of phone_num to generate
+    var i;
+    var Four_Digits_Array = [];
+    for (i = 0; i < temp_cell_count; i++) {
+        Four_Digits_Array[i] = gen_Four_Digits(); 
+    }
+    insert_to_cells(selectedAddress, Four_Digits_Array);
+}
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// Generate Random Four Digits Number {e.g. 1234}
+function gen_Four_Digits() {
+    var i;
+    var temp_Num = [];
+    for (i = 0; i < 4; i++) {
+        if (i === 0)    { temp_Num[i] = Math.floor(Math.random() * 9) + 1;  }
+        else            { temp_Num[i] = Math.floor(Math.random() * 10);     }
+    }
+    var temp_Str = temp_Num.join('');
+    return temp_Str;
+}
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// Full Name
+// Steps of the code:
+// 1. Determine the Selected Cells
+// 2. Generate random numbers
+// 3. Select a name from the list
+// 4. Insert the Full Name into the Selected Cells
+
+function Full_Names() {
+    var Index_Array = location(Index_Array); //Index_Array = Row 1, Column 1, Row 2, Column 2
+    var range = location(range); //getRange(row, column, numRows, numColumns)
+    var selectedAddress = location(selectedAddress); //selectedAddress
+    var temp_cell_count = cell_count(selectedAddress); // Count of Full Names to generate
+    var i;
+    var FullNames_Array = [];
+    for (i = 0; i < temp_cell_count; i++) {
+        FullNames_Array[i] = gen_FullName(); 
+    }
+    insert_to_cells(selectedAddress, FullNames_Array);
+}
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// Generate Random Full Name {e.g. Bob Smith}
+function gen_FullName() {
+    var FullName_List = ["Warren Peinton","Fletcher Blampey","Kristoffer Folshom","Haily Trusler","Yard Shotboulte","Stefanie Hailston","Jilleen Endecott","Orson Neilson","Mitchel Grabiec","Alli Sexty","Teresa Gallacher","Phylys Colicot","Reid Bertwistle","Filberto Chataignier","Nola Diack","Sheeree Dunkerton","Nixie Wisby","Ettore Marcinkus","Andonis Olyet","Robyn Cozby","Romona Edmonson","Deny Duncanson","Em Bloxsum","Nerte Locke","Mariel Thrift","Bambi Huffy","Janetta Geoghegan","Natale Piggin","Elka Clucas","Serene Giblin","Wilone Solloway","Nikolaus Toynbee","Wrennie Murfett","Adam Geaves","Hobie Reasce","Hale Dear","Remy Mallindine","Kenny Dell'Abbate","Isa Duffyn","Hansiain Greener","Ailis Arnault","Rolf Gooble","Michele Wagen","Drona Vanyutin","Reina Gabby","Barrett Meert","Tisha Blake","Goldarina Dendle","Jorgan Samarth","Albert Morsey","Kendra Felder","Fairleigh Greader","Bria Ornells","Donica Lis","Melita Mordue","Martin Wanderschek","Karlee Bowman","Antons Totterdell","Georg Wilmot","Lulita Biaggiotti","Rock Fanstone","Leelah Walklot","Sarette Marre","Gerhardine Selman","Evvie Tillett","Olwen Likly","Andreana Cavolini","Randal Morcombe","Arabele Corstan","Dulcea Mackrill","Dani Winkless","Ashien Cuxon","Bekki Conyard","Bertie Ewens","Ermentrude Rey","Viviene Fowley","Aldwin Peasegod","Cathrine Crimin","Clerkclaude Swadlin","Cammie Wooffinden","Curtice Giacomuzzi","Cody Cuthill","Kaleena Napper","Belle Ketchen","Jolyn Stanway","Neille Dinan","Jacki Henmarsh","Rhianna Roseman","Isabelita Hengoed","Kalie Gatesman","Ulberto Manginot","Rona Trevon","Vinnie Pensom","Anabella Skep","Jarrad Keward","Farlie Selland","Earl MacNeilly","Livvyy De Filippi","Olympe Tirrey"];
+    var i = Math.floor(Math.random() * 101); // Math.floor(Math.random() * (max - min + 1)) + min;
+    
+    //Browser.msgBox("i = " + i + " Name = " + FullName_List[i]); //Testing Purpose
+
+    var temp_FullName = FullName_List[i];
+    return temp_FullName;
+}
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// Phone_Numbers
 // Steps of the code:
 // 1. Determine the Selected Cells
 // 2. Generate random phone numbers => store in tempArray
