@@ -2,45 +2,84 @@
 // Scripts Creates a "Custom menu" w/ "Phone Numbers" button
 
 function onOpen() {
-	// Adds the Custom menu to the Active Spreadsheet
-	SpreadsheetApp.getUi()
-		.createMenu('Data Generator')
-            .addItem('Phone Numbers', 'Phone_Numbers')
-			.addItem('Full Names', 'Full_Names')
-			.addItem('4 Digit Numbers', 'Four_Digits')
-			.addSeparator()
-			.addToUi();
+    var ui = SpreadsheetApp.getUi();
+    // Or DocumentApp or FormApp.
+    ui.createMenu('Data Generator')
+        .addItem('Phone Numbers', 'Phone_Numbers')
+        .addItem('Full Names', 'Full_Names')
+        .addItem('City, State, Zip', 'Address_CSZ')
+        .addSeparator()
+        .addSubMenu(
+            ui.createMenu('Digits')
+                .addItem('4 Digits', 'Four_Digits')
+                .addItem('5 Digits', 'Five_Digits')
+        )
+        .addToUi();
 }
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-// Four_Digits
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// Address_CSZ {City, State, Zip}
+// Steps of the code:
+// 1. Determine the Selected Cells
+// 2. Generate random numbers
+// 3. Select a name from the list
+// 4. Insert the Full Name into the Selected Cells
+
+function Address_CSZ() {
+    var Index_Array = location(Index_Array); //Index_Array = Row 1, Column 1, Row 2, Column 2
+    var range = location(range); //getRange(row, column, numRows, numColumns)
+    var selectedAddress = location(selectedAddress); //selectedAddress
+    var temp_cell_count = cell_count(selectedAddress); // Count of data to generate
+    var i;
+    var CSZ_Array = [];
+    for (i = 0; i < temp_cell_count; i++) {
+        CSZ_Array[i] = gen_Address_CSZ(); 
+    }
+    insert_to_cells(selectedAddress, CSZ_Array);
+}
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// Generate Random Address_CSZ {City, State, Zip} {e.g. San Jose, CA, 11111}
+function gen_Address_CSZ() {
+    var CSZ_List = ["Apache Junction, Arizona, 62891","Charleston, South Carolina, 26691","Shawnee Mission, Kansas, 94245","Fort Lauderdale, Florida, 11035","Portland, Oregon, 33157","Biloxi, Mississippi, 42595","Sandy, Utah, 51557","Greenville, South Carolina, 29955","Fresno, California, 57611","Boise, Idaho, 16218","Flint, Michigan, 67313","Washington, District of Columbia, 80573","Dallas, Texas, 47686","Kansas City, Kansas, 36544","Arlington, Virginia, 69404","Baltimore, Maryland, 22648","Houston, Texas, 53755","San Antonio, Texas, 44082","Cambridge, Massachusetts, 62329","Sioux City, Iowa, 73951","Brooklyn, New York, 44764","Houston, Texas, 22035","Omaha, Nebraska, 96386","Anchorage, Alaska, 17731","Springfield, Illinois, 55221","Miami, Florida, 94416","Montpelier, Vermont, 56111","New York City, New York, 61815","Evansville, Indiana, 10994","El Paso, Texas, 55618","Springfield, Illinois, 71094","Detroit, Michigan, 78482","Pueblo, Colorado, 37616","Houston, Texas, 53809","Milwaukee, Wisconsin, 41960","Wilkes Barre, Pennsylvania, 45146","Pensacola, Florida, 38545","Camden, New Jersey, 30553","West Palm Beach, Florida, 98008","Philadelphia, Pennsylvania, 89600","Phoenix, Arizona, 41488","Grand Rapids, Michigan, 31227","Amarillo, Texas, 14403","Pasadena, Texas, 32172","San Francisco, California, 32091","Omaha, Nebraska, 25785","Lexington, Kentucky, 79723","Richmond, Virginia, 57648","Portland, Oregon, 83349","Jackson, Mississippi, 83773","Arlington, Texas, 11716","Milwaukee, Wisconsin, 73963","Kansas City, Kansas, 40700","Syracuse, New York, 85385","Detroit, Michigan, 18647","Des Moines, Iowa, 22479","Pittsburgh, Pennsylvania, 51488","Miami, Florida, 63405","Harrisburg, Pennsylvania, 41936","Erie, Pennsylvania, 93170","San Diego, California, 25288","Lake Worth, Florida, 51662","Austin, Texas, 63863","New Haven, Connecticut, 30633","Corpus Christi, Texas, 35180","Columbus, Georgia, 22422","Anaheim, California, 91949","Peoria, Illinois, 68337","Louisville, Kentucky, 50209","Birmingham, Alabama, 23314","Springfield, Missouri, 33107","Bakersfield, California, 10904","Denver, Colorado, 47146","Brooklyn, New York, 57444","Indianapolis, Indiana, 28224","Houston, Texas, 55163","Greenville, South Carolina, 18641","Lansing, Michigan, 50290","Dallas, Texas, 83655","Jacksonville, Florida, 57120","Hollywood, Florida, 42857","Maple Plain, Minnesota, 27679","Bakersfield, California, 57560","Fort Myers, Florida, 96388","New Orleans, Louisiana, 51932","Lansing, Michigan, 42189","Miami, Florida, 88129","Charlottesville, Virginia, 30600","Anchorage, Alaska, 87093","Bakersfield, California, 41444","Brooklyn, New York, 28259","Lexington, Kentucky, 30631","Los Angeles, California, 45288","Minneapolis, Minnesota, 91147","Grand Rapids, Michigan, 30200","High Point, North Carolina, 48831","Greensboro, North Carolina, 60048","Topeka, Kansas, 14086","Louisville, Kentucky, 51230","South Bend, Indiana, 40746"];
+    var i = Math.floor(Math.random() * 101); // Math.floor(Math.random() * (max - min + 1)) + min;
+    //Browser.msgBox("i = " + i + " Name = " + FullName_List[i]); //Testing Purpose
+
+    var temp_CSZ = CSZ_List[i];
+    return temp_CSZ;
+}
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// Digits
 // Steps of the code:
 // 1. Determine the Selected Cells
 // 2. Generate random Four_Digits numbers => store in tempArray
 // 3. Insert the Four_Digits numbers from the tempArray into the Selected Cells
+function Four_Digits() { Digits(4)   }
+function Five_Digits() { Digits(5)   }
 
-function Four_Digits() {
+function Digits(x) {
     var Index_Array = location(Index_Array); //Index_Array = Row 1, Column 1, Row 2, Column 2
     var range = location(range); //getRange(row, column, numRows, numColumns)
     var selectedAddress = location(selectedAddress); //selectedAddress
-    var temp_cell_count = cell_count(selectedAddress); // Count of phone_num to generate
+    var temp_cell_count = cell_count(selectedAddress); // Count of Digits to generate
     var i;
-    var Four_Digits_Array = [];
+    var Digits_Array = [];
     for (i = 0; i < temp_cell_count; i++) {
-        Four_Digits_Array[i] = gen_Four_Digits(); 
+        Digits_Array[i] = gen_Digits(x); 
     }
-    insert_to_cells(selectedAddress, Four_Digits_Array);
+    insert_to_cells(selectedAddress, Digits_Array);
 }
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 // Generate Random Four Digits Number {e.g. 1234}
-function gen_Four_Digits() {
+function gen_Digits(x) {
     var i;
     var temp_Num = [];
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < x; i++) {
         if (i === 0)    { temp_Num[i] = Math.floor(Math.random() * 9) + 1;  }
         else            { temp_Num[i] = Math.floor(Math.random() * 10);     }
     }
-    var temp_Str = temp_Num.join('');
-    return temp_Str;
+    var temp_Digits = temp_Num.join('');
+    return temp_Digits;
 }
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = =
