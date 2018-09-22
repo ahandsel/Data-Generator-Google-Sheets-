@@ -11,12 +11,80 @@ function onOpen() {
         .addSeparator()
         .addSubMenu(
             ui.createMenu('Digits')
+                .addItem('2 Digits', 'Two_Digits')
                 .addItem('4 Digits', 'Four_Digits')
                 .addItem('5 Digits', 'Five_Digits')
+        )
+        .addSeparator()
+        .addSubMenu(
+            ui.createMenu('Dates')
+                .addItem('Past 3 Months to Today', 'Past_Months')
+                .addItem('Today to Future 3 Months', 'Future_Months')
         )
         .addToUi();
 }
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// Dates(x) {Generates random dates either in between Past 3 Months to Today or Today to Future 3 Months}
+// Steps of the code:
+// 1. Determine the Selected Cells
+// 2. Generate random Dates between the Past 3 Months to Today  => store in tempArray
+// 3. Insert the Dates  from the tempArray into the Selected Cells
+function Past_Months() { Dates(0)   }
+function Future_Months() { Dates(1)   }
+
+function Dates(x) {
+    var Index_Array = location(Index_Array); //Index_Array = Row 1, Column 1, Row 2, Column 2
+    var range = location(range); //getRange(row, column, numRows, numColumns)
+    var selectedAddress = location(selectedAddress); //selectedAddress
+    var temp_cell_count = cell_count(selectedAddress); // Count of data to generate
+    var i;
+    var Dates_Array = [];
+
+    // Determine the Following Dates:
+    // Today:
+    var Date_Today = new Date();
+    //Browser.msgBox("Date_Today = "+Date_Today);
+
+    //3 Months in the Past
+    var temp_Today = new Date();
+    temp_Today.setMonth(temp_Today.getMonth() - 3);
+    var Date_Past = temp_Today;
+    //Browser.msgBox("Date_Past = "+Date_Past);
+    
+    //3 Months in the Future
+    var temp_Today = new Date();
+    temp_Today.setMonth(temp_Today.getMonth() + 3);
+    var Date_Future = temp_Today;
+    //Browser.msgBox("Date_Future = "+Date_Future);
+
+    if (x == 0) {
+        for (i = 0; i < temp_cell_count; i++){Dates_Array[i] = gen_Dates(Date_Past, Date_Today);}
+    } else {
+        for (i = 0; i < temp_cell_count; i++){Dates_Array[i] = gen_Dates(Date_Today, Date_Future);}        
+    }
+    insert_to_cells(selectedAddress, Dates_Array);
+}
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// gen_Dates(x) {Generates random dates either in between Past 3 Months to Today or Today to Future 3 Months}
+// if x = 0 => Past // if x = 1 => Future
+function gen_Dates(start, end) {
+    var temp_Date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+    var temp_Date_String = getFormattedDate(temp_Date);
+    return temp_Date_String;
+}
+function getFormattedDate(date) {
+    var year = date.getFullYear();
+  
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+  
+    var day = date.getDate().toString();
+    day = day.length > 1 ? day : '0' + day;
+    
+    return month + '/' + day + '/' + year;
+  }
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 // Address_CSZ {City, State, Zip}
 // Steps of the code:
@@ -54,8 +122,10 @@ function gen_Address_CSZ() {
 // 1. Determine the Selected Cells
 // 2. Generate random Four_Digits numbers => store in tempArray
 // 3. Insert the Four_Digits numbers from the tempArray into the Selected Cells
-function Four_Digits() { Digits(4)   }
-function Five_Digits() { Digits(5)   }
+function Z_to_T_Digits()   { Digits(2) }
+function Two_Digits()   { Digits(2) }
+function Four_Digits()  { Digits(4) }
+function Five_Digits()  { Digits(5) }
 
 function Digits(x) {
     var Index_Array = location(Index_Array); //Index_Array = Row 1, Column 1, Row 2, Column 2
