@@ -11,6 +11,7 @@ function onOpen() {
         .addSeparator()
         .addSubMenu(
             ui.createMenu('Digits')
+                .addItem('0 to 10', 'Z_to_T_Digits')
                 .addItem('2 Digits', 'Two_Digits')
                 .addItem('4 Digits', 'Four_Digits')
                 .addItem('5 Digits', 'Five_Digits')
@@ -117,12 +118,32 @@ function gen_Address_CSZ() {
 }
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// Z_to_T_Digits
+// Steps of the code:
+// 1. Determine the Selected Cells
+// 2. Generate random Number numbers => store in tempArray
+// 3. Insert the number numbers from the tempArray into the Selected Cells
+
+function Z_to_T_Digits() {
+    var Index_Array = location(Index_Array); //Index_Array = Row 1, Column 1, Row 2, Column 2
+    var range = location(range); //getRange(row, column, numRows, numColumns)
+    var selectedAddress = location(selectedAddress); //selectedAddress
+    var temp_cell_count = cell_count(selectedAddress); // Count of Digits to generate
+    var i;
+    var Digits_Array = [];
+    for (i = 0; i < temp_cell_count; i++) {
+        Digits_Array[i] = Math.floor(Math.random()*11); 
+    }
+    insert_to_cells(selectedAddress, Digits_Array);
+}
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+// = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 // Digits
 // Steps of the code:
 // 1. Determine the Selected Cells
 // 2. Generate random Four_Digits numbers => store in tempArray
 // 3. Insert the Four_Digits numbers from the tempArray into the Selected Cells
-function Z_to_T_Digits()   { Digits(2) }
 function Two_Digits()   { Digits(2) }
 function Four_Digits()  { Digits(4) }
 function Five_Digits()  { Digits(5) }
